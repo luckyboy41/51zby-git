@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zby.dao.UserDao" >
+  <resultMap id="BaseResultMap" type="com.zby.entity.User" >
+  </resultMap>
+ 
+  <select id="getByName" resultType="com.zby.entity.User">
+  	select * from users where  username = #{0}
+  </select>  
+  
+  <insert id="createUser" parameterType="com.zby.entity.User">
+  	insert into users (id, username, password, enabled)
+    	values (#{id}, #{username}, #{password},  #{enabled})
+  </insert>
+  
+  <insert id="createAuth" parameterType="com.zby.entity.Authorities">
+  	insert into authorities (id, username, authority)
+    	values (#{id}, #{username}, #{authority})
+  </insert>
+</mapper>

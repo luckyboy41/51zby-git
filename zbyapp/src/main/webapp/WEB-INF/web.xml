@@ -6,21 +6,46 @@
  
 	 <display-name>zby</display-name>
 	 
-	 <filter>  
-        <filter-name>springSecurityFilterChain</filter-name>  
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>  
-     </filter>  
-  
-	 <filter-mapping>  
-        <filter-name>springSecurityFilterChain</filter-name>  
-        <url-pattern>/*</url-pattern>  
-	 </filter-mapping> 
+	 <context-param>
+		 <param-name>contextConfigLocation</param-name>
+		 <param-value>classpath:config/spring.xml;
+            classpath:config/spring-mybatis.xml;
+            classpath:config/spring-security.xml;
+         </param-value>
+	 </context-param>
 	 
+	 <!-- Spring 安全认证 -->	
+	 <filter>
+		 <filter-name>springSecurityFilterChain</filter-name>
+		 <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	 </filter>	
+	 <filter-mapping>
+		 <filter-name>springSecurityFilterChain</filter-name>
+		 <url-pattern>/*</url-pattern>
+	 </filter-mapping>
+	 
+	<!-- 设计路径变量值 -->
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>springmvc.root</param-value>
+    </context-param>
+     
+   	 <listener>
+		 <listener-class>
+		 	org.springframework.web.context.ContextLoaderListener
+		 </listener-class>
+	 </listener>
+     
+     <!-- springMVC核心配置 -->	 
 	 <servlet>
 		 <servlet-name>dispatcher</servlet-name>
 		 <servlet-class>
 			 org.springframework.web.servlet.DispatcherServlet
 		 </servlet-class>
+		 <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:config/spring-mvc.xml</param-value>
+         </init-param>
 		 <load-on-startup>1</load-on-startup>
 	 </servlet>
 	 
@@ -29,14 +54,25 @@
 		 <url-pattern>/</url-pattern>
 	 </servlet-mapping>
 	 
-	 <context-param>
-		 <param-name>contextConfigLocation</param-name>
-		 <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
-	 </context-param>
-	 
-	 <listener>
-		 <listener-class>
-		 	org.springframework.web.context.ContextLoaderListener
-		 </listener-class>
-	 </listener>
+	 <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+ 
+    <!-- 错误跳转页面 -->
+    <error-page>
+        <!-- 路径不正确 -->
+        <error-code>404</error-code>
+        <location>/WEB-INF/errorpage/404.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- 没有访问权限，访问被禁止 -->
+        <error-code>405</error-code>
+        <location>/WEB-INF/errorpage/405.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- 内部错误 -->
+        <error-code>500</error-code>
+        <location>/WEB-INF/errorpage/500.jsp</location>
+    </error-page>
+    
 </web-app>

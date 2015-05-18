@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+    <!-- 定义目标bean和bean中的方法 -->  
+    <bean id="hotelInfoJob" class="com.csst.hotelCrawler.job.HotelInfoJob"/>
+    <bean id="HotelCommentJob" class="com.csst.hotelCrawler.job.HotelCommentJob"/>
+    <bean id="HotelScoreJob" class="com.csst.hotelCrawler.job.HotelScoreJob"/>
+    <bean id="hotelPriceJob1" class="com.csst.hotelCrawler.job.HotelPriceJob"/>
+     <bean id="commentAnalysisJob" class="com.csst.hotelCrawler.job.CommentAnalysisJob"/>
+    <bean id="commentStatisticJob" class="com.csst.hotelCrawler.job.CommentStatisticJob"/>
+    
+   
+    
+<bean id="priceMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <property name="targetObject">  
+	        <ref bean="hotelPriceJob1"/>  
+	    </property>  
+	    <property name="targetMethod">
+	        <value>exe</value>  
+	    </property>  
+	</bean>
+	
+	
+	<!-- ======================== 调度触发器 ======================== -->  
+ 	<bean id="PriceTigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+	    <property name="jobDetail" ref="priceMethod"></property>  
+	    <property name="cronExpression" value="0 08 9 * * ?"></property>  
+	</bean> 
+	
+	  
+	<!-- ======================== 调度工厂 ======================== -->  
+	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	    <property name="triggers">  
+	        <list>  
+	            <!-- <ref bean="FinanceJobTigger"/>  
+	            <ref bean="NewsJobTigger"/> 
+	            <ref bean="BbsJobTigger"/> 
+	            <ref bean="BbsAnalysisJobTigger"/>
+	            <ref bean="WDZJJobTigger"/>-->
+	           <!--  <ref bean="PriceTigger"/> -->
+	        </list>  
+	    </property>  
+	</bean>    
+</beans>
